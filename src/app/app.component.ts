@@ -81,7 +81,7 @@ export class AppComponent {
 
 
   editEmployee(employee: Employee) {
-    this.selectedEmployee = { ...employee }; // Clone the employee for editing
+    this.selectedEmployee = { ...employee }; // Clone 
   }
 
   updateEmployee() {

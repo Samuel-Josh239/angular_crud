@@ -34,21 +34,14 @@ export class EmployeeService {
   getEmpById(IDPK: number): Observable<any> {
     return this.http.get<{ ExecutiveList: Employee[] }>(`${this.baseUrl}/execuitiveviewbyid/${IDPK}`);
   }
-  
-  
-
-
-
-
-
 
   updateEmployee(employee: Employee): Observable<Employee> {
     const formData = new FormData();
-    formData.append("IDPK", employee.IDPK.toString());
+    formData.append("Id", employee.IDPK.toString());
     formData.append("Name", employee.executives_name);
-    formData.append("Number", employee.executives_number);
-    formData.append("DOB", employee.executives_dob);
-    formData.append("Email", employee.executives_email);
+    formData.append("Mobile", employee.executives_number);
+    // formData.append("DOB", employee.executives_dob);
+    formData.append("Mail", employee.executives_email);
     formData.append("Designation", employee.exec_desig);
   
     return this.http.post<Employee>(`${this.baseUrl}/updateexecutives`, formData);
