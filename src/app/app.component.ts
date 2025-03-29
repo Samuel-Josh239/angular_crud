@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { EmployeeService } from './service/employee.service';
 import { Employee } from './interface/employee';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,8 @@ export class AppComponent {
   employee: Employee[] = [];
   selectedEmployee: Employee | null = null;
   searchId!: number;
+  employeeForm:FormGroup;
+  // atSymbolValidator:'@';
 
   newEmployee: Employee = {
     IDPK: 0,
@@ -27,15 +29,34 @@ export class AppComponent {
     exec_desig: '',
   };
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(private employeeService: EmployeeService,private formbuilder:FormBuilder) {
+    this.employeeForm=formbuilder.group({
+      executives_name: ['', [Validators.required, Validators.minLength(3)]],
+      executives_number: ['', [Validators.required, Validators.pattern('^[0-9]{10}$') ,Validators.maxLength(10)]],
+      executives_dob: ['', Validators.required],
+      executives_email: ['', [Validators.required, Validators.email]],
+      exec_desig: ['', Validators.required]
+    })
+    // this.employeeForm = this.formbuilder.group({
+    //   executives_name: ['', [Validators.required, Validators.minLength(3)]],
+    //   executives_number: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+    //   executives_dob: ['', Validators.required],
+    //   executives_email: ['', [Validators.required, this.atSymbolValidator]],  // Custom Validator
+    //   exec_desig: ['', Validators.required]
+    // });
+    
+  }
 
   ngOnInit() {
+   this.getEmp()
+  }
+
+  getEmp(){
     this.employeeService.getEmp().subscribe((data: Employee[]) => {
       console.log(data);
       this.employee = data;
     });
   }
-
   addEmp() {
     this.employeeService.saveUser(this.newEmployee).subscribe((data: Employee) => {
       console.log(data);
@@ -48,6 +69,9 @@ export class AppComponent {
         executives_email: '',
         exec_desig: '',
       };
+      if(data){
+        this.ngOnInit()
+      }
     });
   }
 
